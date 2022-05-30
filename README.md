@@ -2,7 +2,6 @@
 
 ![image](https://www.adu.ac.ae/ResourcePackages/AbuDhabiUniversityNew/assets/dist/img/images/adu/logo-1.png)
 
-
 # **Car Service Center Database Report**
 ### **Done By:**
 1- Moutasim Billah El Ayoubi 1080415
@@ -228,7 +227,7 @@ This application will contain a lot of data and useful information which is extr
 ![image](image/1NF.png)
 
 ## Second Normalization Form 
-
+![image](image/2NF.png)
 ## Third Normalization Form 
 
 ## SQL code
@@ -256,10 +255,16 @@ CREATE TABLE EQUIPMENTS (
 -- Employee Service Car
 CREATE TABLE EMPLOYEE_SERVICE_CARS (
     em_service_car_id  number,
-    brand              varchar2(20) not null,
-    model_number       number not null,
     plate_number       number not null unique,
     constraint pk_service_car primary key (em_service_car_id)
+);
+
+-- Employee Car
+CREATE TABLE EMP_CAR (
+    em_service_car_id    number,  
+    brand              varchar2(20) not null,  
+    model_number       number not null,  
+    constraint pk_emp_car primary key (em_service_car_id)
 );
 
 -- Employee Profile
@@ -283,11 +288,17 @@ CREATE TABLE EMPLOYEE_PROFILE (
 
 -- Customer Cars
 CREATE TABLE CUSTOMER_CARS (
+    customer_car_id    number,   
+    plate_number       number not null unique,
+    constraint pk_customer_cars primary key (customer_car_id)
+);
+
+-- Customer Car
+CREATE TABLE CUST_CAR (
     customer_car_id    number,  
     brand              varchar2(20) not null,  
     model_number       number not null,  
-    plate_number       number not null unique,
-    constraint pk_customer_cars primary key (customer_car_id)
+    constraint pk_cust_car primary key (customer_car_id)
 );
 
 -- Customer Profile
@@ -412,21 +423,39 @@ INSERT INTO EQUIPMENTS VALUES
 
 -- Insert data into Employee Service Car relation
 INSERT INTO EMPLOYEE_SERVICE_CARS VALUES
-(001, 'Nissan', 2019, 16284);
+(001, 16284);
 INSERT INTO EMPLOYEE_SERVICE_CARS VALUES
-(002, 'Nissan', 2019, 87426);
+(002, 87426);
 INSERT INTO EMPLOYEE_SERVICE_CARS VALUES
-(003, 'Nissan', 2019, 28393);
+(003, 28393);
 INSERT INTO EMPLOYEE_SERVICE_CARS VALUES
-(004, 'Nissan', 2019, 63782);
+(004, 63782);
 INSERT INTO EMPLOYEE_SERVICE_CARS VALUES
-(005, 'Nissan', 2019, 23345);
+(005, 23345);
 INSERT INTO EMPLOYEE_SERVICE_CARS VALUES
-(006, 'Nissan', 2019, 45643);
+(006, 45643);
 INSERT INTO EMPLOYEE_SERVICE_CARS VALUES
-(007, 'Nissan', 2019, 56743);
+(007, 56743);
 INSERT INTO EMPLOYEE_SERVICE_CARS VALUES
-(008, 'Nissan', 2019, 23488);
+(008, 23488);
+
+-- Insert data into Employee Car relation
+INSERT INTO EMP_CAR VALUES
+(001, 'Nissan', 2019);
+INSERT INTO EMP_CAR VALUES
+(002, 'Nissan', 2019);
+INSERT INTO EMP_CAR VALUES
+(003, 'Nissan', 2019);
+INSERT INTO EMP_CAR VALUES
+(004, 'Nissan', 2019);
+INSERT INTO EMP_CAR VALUES
+(005, 'Nissan', 2019);
+INSERT INTO EMP_CAR VALUES
+(006, 'Nissan', 2019);
+INSERT INTO EMP_CAR VALUES
+(007, 'Nissan', 2019);
+INSERT INTO EMP_CAR VALUES
+(008, 'Nissan', 2019);
 
 -- Insert data into Employee Profile relation
 INSERT INTO EMPLOYEE_PROFILE VALUES
@@ -448,25 +477,47 @@ INSERT INTO EMPLOYEE_PROFILE VALUES
 
 -- Insert data into Customer Cars relation
 INSERT INTO CUSTOMER_CARS VALUES
-(001, 'Honda', 2020, 12768);
+(001, 12768);
 INSERT INTO CUSTOMER_CARS VALUES
-(002, 'Infiniti', 2021, 18739);
+(002, 18739);
 INSERT INTO CUSTOMER_CARS VALUES
-(003, 'Toyota', 2018, 28373);
+(003, 28373);
 INSERT INTO CUSTOMER_CARS VALUES
-(004, 'Audi', 2022, 35624);
+(004, 35624);
 INSERT INTO CUSTOMER_CARS VALUES
-(005, 'BMW', 2011, 75623);
+(005, 75623);
 INSERT INTO CUSTOMER_CARS VALUES
-(006, 'Land Rover', 2016, 25475);
+(006, 25475);
 INSERT INTO CUSTOMER_CARS VALUES
-(007, 'Ford', 2011, 27832);
+(007, 27832);
 INSERT INTO CUSTOMER_CARS VALUES
-(008, 'Jeep', 2016, 98732);
+(008, 98732);
 INSERT INTO CUSTOMER_CARS VALUES
-(009, 'GMC', 2018, 47328);
+(009, 47328);
 INSERT INTO CUSTOMER_CARS VALUES
-(010, 'Infiniti', 2022, 62946);
+(010, 62946);
+
+-- Insert data into Customer Car relation
+INSERT INTO CUST_CAR VALUES
+(001, 'Honda', 2020);
+INSERT INTO CUST_CAR VALUES
+(002, 'Infiniti', 2021);
+INSERT INTO CUST_CAR VALUES
+(003, 'Toyota', 2018);
+INSERT INTO CUST_CAR VALUES
+(004, 'Audi', 2022);
+INSERT INTO CUST_CAR VALUES
+(005, 'BMW', 2011);
+INSERT INTO CUST_CAR VALUES
+(006, 'Land Rover', 2016);
+INSERT INTO CUST_CAR VALUES
+(007, 'Ford', 2011);
+INSERT INTO CUST_CAR VALUES
+(008, 'Jeep', 2016);
+INSERT INTO CUST_CAR VALUES
+(009, 'GMC', 2018);
+INSERT INTO CUST_CAR VALUES
+(010, 'Infiniti', 2022);
 
 -- Insert data into Customer Profile relation
 INSERT INTO CUSTOMER_PROFILE VALUES
@@ -643,8 +694,10 @@ INSERT INTO ORDERED_PRODUCTS VALUES
 SELECT * FROM SERVICE_CENTER;
 SELECT * FROM EQUIPMENTS;
 SELECT * FROM EMPLOYEE_SERVICE_CARS;
+SELECT * FROM EMP_CAR;
 SELECT * FROM EMPLOYEE_PROFILE;
 SELECT * FROM CUSTOMER_CARS;
+SELECT * FROM CUST_CAR;
 SELECT * FROM CUSTOMER_PROFILE;
 SELECT * FROM FEEDBACKS;
 SELECT * FROM SERVICES;
