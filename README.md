@@ -23,20 +23,20 @@ Dr. Adel Khleifi
 | Identifying Entities  |[Link](#identifying-entities)|
 | Entities Explanation |[Link](#entities-explanation)|
 | Identifying Attributes |[Link](#identifying-attributes)|
+| Unique Identifiers |[Link](#unique-identifiers)|
 | Crow's Foot Notation |[Link](#crows-foot-notation)|
 | ER Diagram  |[Link](#er-diagram)|
-| Logic Data Model |[Link](#logic-data-model)|
 | Relationship Diagram |[Link](#relationship-diagram)| 
 | Relationship Matrix |[Link](#relationship-matrix)|
 | First Normalization Form |[Link](#first-normalization-form)|
 | Second Normalization Form  |[Link](#second-normalization-form)|
 | Third Normalization Form  |[Link](#third-normalization-form)|
+| Conceptual data model |[Link](#conceptual-data-model)|
+| Logic Data Model |[Link](#logic-data-model)|
 | SQL code |[Link](#sql-code)|
 | Survey |[Link](#survey)|
 
 <hr/>
-
-
 
 ## Abstract
 
@@ -201,11 +201,16 @@ This application will contain a lot of data and useful information which is extr
 
 <br><br>
 
+## Unique Identifiers
+
+![image](image/UIDs.png)
+
+
 ## **Crow's Foot Notation**
 
 | | | |
 | ----------- | ----------- |----------- |
-|![image](image/servise_center.png)| ![imgae](image/equipments.png)| ![image](image/em_profile.png)|
+|![image](image/service_center.png)| ![imgae](image/equipments.png)| ![image](image/em_profile.png)|
 |![image](image/em_service_cars.png)| ![image](image/em_car_history.png)| ![image](image/customer_services_history.png)|
 |![image](image/customer_profile.png)| ![image](image/customer_order.png)| ![image](image/customer_cars.png)|
 |![image](image/feedback.png)| ![image](image/products.png)| ![image](image/ordered_products.png)|
@@ -213,9 +218,6 @@ This application will contain a lot of data and useful information which is extr
 
 ## ER Diagram
 ![image](image/ERD.png)
-
-## Logic Data Model
-![image](image/DataModel.png)
 
 ## Relationship Diagram 
 ![image](image/RelationshipDiagram.png)
@@ -228,7 +230,25 @@ This application will contain a lot of data and useful information which is extr
 
 ## Second Normalization Form 
 ![image](image/2NF.png)
+
 ## Third Normalization Form 
+![image](image/3NF.png)
+
+## Conceptual data model
+
+| | | |
+| ----------- | ----------- |----------- |
+|![image](image/models/mdOne.png)    | ![image](image/models/mdSix.png)|
+|![image](image/models/mdTwo.png)      | ![image](image/models/mdSeven.png)|
+|![image](image/models/mdThree.png)     | ![image](image/models/mdEight.png)| 
+|![image](image/models/mdFour.png)        | ![image](image/models/mdNine.png)| 
+|![image](image/models/mdFive.png)         | ![image](image/models/mdTen.png)|
+|![image](image/models/mdEleven.png)        | ![image](image/models/mdTwelve.png)|
+|![image](image/models/mdThirteen.png)        | ![image](image/models/mdFourteen.png)|
+|![image](image/models/mdFifteen.png)           | ![image](image/models/mdSixteen.png)|
+
+## Logic Data Model
+![image](image/Data_Model.png)
 
 ## SQL code
 
@@ -273,17 +293,30 @@ CREATE TABLE EMPLOYEE_PROFILE (
     first_name     varchar2(20) not null,  
     last_name      varchar2(20) not null, 
     email          varchar2(55) not null unique,
-    position       varchar2(10) not null,
-    password       varchar2(20) not null unique,
+    password       varchar2(20) not null,
     phone_number   varchar2(10) not null unique,
-    date_of_birth  date not null,
-    salary         number(7,2) not null,
     passport_Id    number not null unique,
     service_center_id  number not null,
     em_service_car_id  number not null,
     constraint pk_employee_profile primary key (em_profile_id),  
     constraint fk_service_center foreign key (service_center_id) references service_center (service_center_id),
     constraint fk_service_car foreign key (em_service_car_id) references employee_service_cars (em_service_car_id)
+);
+
+-- Employee Salary
+CREATE TABLE EMP_SALARY (
+    position       varchar2(10) not null,
+    salary         number(7,2) not null,
+    constraint pk_position primary key (position)
+);
+
+-- Employee Information
+CREATE TABLE EMP_INFO (
+    em_profile_id  number,
+    date_of_birth  date not null,
+    position       varchar2(10) not null,
+    constraint pk_EMP_INFO primary key (em_profile_id),  
+    constraint fk_position foreign key (position) references EMP_SALARY (position)
 );
 
 -- Customer Cars
@@ -308,12 +341,18 @@ CREATE TABLE CUSTOMER_PROFILE (
     last_name      varchar2(20) not null, 
     email          varchar2(55) unique,  
     phone_number   varchar2(10) not null unique,
-    country        varchar2(20) not null,
-    password       varchar2(20) not null unique,
-    date_of_birth  Date,
+    password       varchar2(20) not null,
     customer_car_id  number not null,
     constraint pk_customer_profile primary key (customer_id),  
     constraint fk_customer_cars foreign key (customer_car_id) references customer_cars (customer_car_id)
+);
+
+--  Customer Information
+CREATE TABLE CUST_INFO (
+    customer_id    number,     
+    country varchar2(20) not null,
+    date_of_birth  Date,
+    constraint pk_customer primary key (customer_id)
 );
 
 -- Feedbacks
@@ -459,21 +498,45 @@ INSERT INTO EMP_CAR VALUES
 
 -- Insert data into Employee Profile relation
 INSERT INTO EMPLOYEE_PROFILE VALUES
-(2165, 'John', 'Johnson', 'garnett2010@hotmail.com', 'Labor', 'azae4Quea', '0503928234', DATE '1984-01-31', 3000, 990742632, 01, 001);
+(2165, 'John', 'Johnson', 'garnett2010@hotmail.com', 'azae4Quea', '0503928234', 990742632, 01, 001);
 INSERT INTO EMPLOYEE_PROFILE VALUES
-(6473, 'Michael', 'Martin', 'hermann1978@yahoo.com', 'Labor', 'Dee6ua7ekai', '0506108851', DATE '1968-09-18', 3000, 608874318, 01, 002);
+(6473, 'Michael', 'Martin', 'hermann1978@yahoo.com', 'Dee6ua7ekai', '0506108851', 608874318, 01, 002);
 INSERT INTO EMPLOYEE_PROFILE VALUES
-(9287, 'Gregory', 'Martinez', 'bailey1990@yahoo.com', 'Labor', 'Zi3oGh3mo2fah','0505464887', DATE '1973-08-07', 3000, 294782221, 01, 003);
+(9287, 'Gregory', 'Martinez', 'bailey1990@yahoo.com', 'Zi3oGh3mo2fah','0505464887', 294782221, 01, 003);
 INSERT INTO EMPLOYEE_PROFILE VALUES
-(6735, 'Francisco', 'Westra', 'treie1972@hotmail.com', 'Supervisor', 'weiGh6exie', '0585654887', DATE '1982-04-5', 3500, 408422083, 01, 004);
+(6735, 'Francisco', 'Westra', 'treie1972@hotmail.com', 'weiGh6exie', '0585654887', 408422083, 01, 004);
 INSERT INTO EMPLOYEE_PROFILE VALUES
-(8273, 'Michael', 'Gustin', 'halli5.oconne@hotmail.com', 'Labor', 'viiSh5latee','0556170992', DATE '1975-02-10', 3000, 782634582, 02, 005);
+(8273, 'Michael', 'Gustin', 'halli5.oconne@hotmail.com', 'viiSh5latee','0556170992', 782634582, 02, 005);
 INSERT INTO EMPLOYEE_PROFILE VALUES
-(4567, 'Danial', 'Ratliff', 'jadyn2008@hotmail.com', 'Supervisor', 'Upuequ3Bo2','0551489597', DATE '1965-01-11', 3500, 279834604, 02, 006);
+(4567, 'Danial', 'Ratliff', 'jadyn2008@hotmail.com', 'Upuequ3Bo2','0551489597', 279834604, 02, 006);
 INSERT INTO EMPLOYEE_PROFILE VALUES
-(4325, 'John', 'Tuttle', 'franz2002@gmail.com', 'Labor', 'Xoor4ucoox','0551253678', DATE '1956-11-04', 3000, 342317084, 02, 007);
+(4325, 'John', 'Tuttle', 'franz2002@gmail.com', 'Xoor4ucoox','0551253678', 342317084, 02, 007);
 INSERT INTO EMPLOYEE_PROFILE VALUES
-(7845, 'Thomas', 'Riddick', 'randi_kuhi4@gmail.com', 'Labor', 'ohshoKo9aew','0583567825', DATE '1961-03-10', 3000.00, 697857818, 02, 008);
+(7845, 'Thomas', 'Riddick', 'randi_kuhi4@gmail.com', 'ohshoKo9aew','0583567825', 697857818, 02, 008);
+
+-- Insert data into Employee Salary relation
+INSERT INTO EMP_SALARY VALUES
+('Supervisor', 3500);
+INSERT INTO EMP_SALARY VALUES
+('Labor', 3000);
+
+-- Insert data into Employee Information relation
+INSERT INTO EMP_INFO VALUES
+(2165, DATE '1984-01-31', 'Labor');
+INSERT INTO EMP_INFO VALUES
+(6473, DATE '1968-09-18', 'Labor');
+INSERT INTO EMP_INFO VALUES
+(9287, DATE '1973-08-07', 'Labor');
+INSERT INTO EMP_INFO VALUES
+(6735, DATE '1982-04-5','Supervisor');
+INSERT INTO EMP_INFO VALUES
+(8273, DATE '1975-02-10', 'Labor');
+INSERT INTO EMP_INFO VALUES
+(4567, DATE '1965-01-11', 'Supervisor');
+INSERT INTO EMP_INFO VALUES
+(4325, DATE '1956-11-04', 'Labor');
+INSERT INTO EMP_INFO VALUES
+(7845, DATE '1961-03-10', 'Labor');
 
 -- Insert data into Customer Cars relation
 INSERT INTO CUSTOMER_CARS VALUES
@@ -521,25 +584,47 @@ INSERT INTO CUST_CAR VALUES
 
 -- Insert data into Customer Profile relation
 INSERT INTO CUSTOMER_PROFILE VALUES
-(5321, 'Glenn',  'Robinson', 'ellis_wiega@hotmail.com', '0503928234', 'United States', 'jaf3booCoh', DATE '1997-11-05', 001);
+(5321, 'Glenn',  'Robinson', 'ellis_wiega@hotmail.com', '0503928234', 'jaf3booCoh', 001);
 INSERT INTO CUSTOMER_PROFILE VALUES
-(5276, 'Thomas', 'Smith', 'janiya.brow2@gmail.com', '0505678234', 'Japan', 'kwnFD4588P', DATE '1992-09-04', 002);
+(5276, 'Thomas', 'Smith', 'janiya.brow2@gmail.com', '0505678234', 'kwnFD4588P', 002);
 INSERT INTO CUSTOMER_PROFILE VALUES
-(5829, 'Joseph', 'Thies', 'liana19751983@yahoo.com', '0503926534', 'England', 'MW7q469AwY', DATE '1970-01-23', 003);
+(5829, 'Joseph', 'Thies', 'liana19751983@yahoo.com', '0503926534', 'MW7q469AwY', 003);
 INSERT INTO CUSTOMER_PROFILE VALUES
-(5872, 'Stanford', 'Brown', 'alicia1991@yahoo.com', '0503928546', 'Egypt', '2yc3LRRx4R', DATE '1985-03-07', 004);
+(5872, 'Stanford', 'Brown', 'alicia1991@yahoo.com', '0503928546', '2yc3LRRx4R', 004);
 INSERT INTO CUSTOMER_PROFILE VALUES
-(5928, 'Bill', 'Pettway', 'theron1988@hotmail.com', '0557548234', 'Italy', 'jdsfsdiofh', DATE '1962-02-06', 005);
+(5928, 'Bill', 'Pettway', 'theron1988@hotmail.com', '0557548234', 'jdsfsdiofh', 005);
 INSERT INTO CUSTOMER_PROFILE VALUES
-(5920, 'Catherine', 'Voss', 'geovanni_johns@hotmail.com', '0578098234', 'chiko slovakia', 'isduhfuidf', DATE '1984-11-30', 006);
+(5920, 'Catherine', 'Voss', 'geovanni_johns@hotmail.com', '0578098234', 'isduhfuidf', 006);
 INSERT INTO CUSTOMER_PROFILE VALUES
-(5372, 'Nicole', 'Barnes', 'jeanette1995@gmail.com', '0549058234', 'United States', 'duy8djbfis', DATE '1996-09-30', 007);
+(5372, 'Nicole', 'Barnes', 'jeanette1995@gmail.com', '0549058234', 'duy8djbfis', 007);
 INSERT INTO CUSTOMER_PROFILE VALUES
-(5332, 'David', 'Peake', 'noah.padber2@yahoo.com', '0558908234', 'United Kingdom', '32uiuudsc', DATE '2000-04-12', 008);
+(5332, 'David', 'Peake', 'noah.padber2@yahoo.com', '0558908234', '32uiuudsc', 008);
 INSERT INTO CUSTOMER_PROFILE VALUES
-(5778, 'Fred', 'Brink', 'moie2015@yahoo.com', '0501348335', 'United Kingdom', '87hbfdsfs', DATE '1990-02-06', 009);
+(5778, 'Fred', 'Brink', 'moie2015@yahoo.com', '0501348335', '87hbfdsfs', 009);
 INSERT INTO CUSTOMER_PROFILE VALUES
-(5980, 'Denise', 'Bricker', 'marta_labad@gmail.com', '0556927893', 'England', 'ihbndiuf8', DATE '1994-12-09', 010);
+(5980, 'Denise', 'Bricker', 'marta_labad@gmail.com', '0556927893', 'ihbndiuf8', 010);
+
+-- Insert data into Customer Information relation
+INSERT INTO CUST_INFO VALUES
+(5321, 'United States', DATE '1997-11-05');
+INSERT INTO CUST_INFO VALUES
+(5276, 'Japan', DATE '1992-09-04');
+INSERT INTO CUST_INFO VALUES
+(5829, 'England', DATE '1970-01-23');
+INSERT INTO CUST_INFO VALUES
+(5872, 'Egypt', DATE '1985-03-07');
+INSERT INTO CUST_INFO VALUES
+(5928, 'Italy', DATE '1962-02-06');
+INSERT INTO CUST_INFO VALUES
+(5920, 'chiko slovakia', DATE '1984-11-30');
+INSERT INTO CUST_INFO VALUES
+(5372, 'United States', DATE '1996-09-30');
+INSERT INTO CUST_INFO VALUES
+(5332, 'United Kingdom', DATE '2000-04-12');
+INSERT INTO CUST_INFO VALUES
+(5778, 'United Kingdom', DATE '1990-02-06');
+INSERT INTO CUST_INFO VALUES
+(5980, 'England', DATE '1994-12-09');
 
 -- Insert data into Feedbacks relation
 INSERT INTO FEEDBACKS VALUES
@@ -696,8 +781,11 @@ SELECT * FROM EQUIPMENTS;
 SELECT * FROM EMPLOYEE_SERVICE_CARS;
 SELECT * FROM EMP_CAR;
 SELECT * FROM EMPLOYEE_PROFILE;
+SELECT * FROM EMP_SALARY;
+SELECT * FROM EMP_INFO;
 SELECT * FROM CUSTOMER_CARS;
 SELECT * FROM CUST_CAR;
+SELECT * FROM CUST_INFO;
 SELECT * FROM CUSTOMER_PROFILE;
 SELECT * FROM FEEDBACKS;
 SELECT * FROM SERVICES;

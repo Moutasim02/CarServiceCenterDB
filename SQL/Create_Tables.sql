@@ -7,66 +7,97 @@ CREATE TABLE SERVICE_CENTER (
     constraint pk_service_center primary key (service_center_id)
 );
 
--- Equipments
+-- Equiments
 CREATE TABLE EQUIPMENTS (
     serial_number  number,
     equiment_name  varchar2(55) not null,
     warranty_date  Date not null,
     service_center_id  number not null,
-    constraint pk_equiments primary key (serial_number),
+    constraint pk_equiments primary key (serial_number),  
     constraint fk_service foreign key (service_center_id) references SERVICE_CENTER (service_center_id)
 );
 
 -- Employee Service Car
 CREATE TABLE EMPLOYEE_SERVICE_CARS (
     em_service_car_id  number,
-    brand              varchar2(20) not null,
-    model_number       number not null,
     plate_number       number not null unique,
     constraint pk_service_car primary key (em_service_car_id)
+);
+
+-- Employee Car
+CREATE TABLE EMP_CAR (
+    em_service_car_id    number,  
+    brand              varchar2(20) not null,  
+    model_number       number not null,  
+    constraint pk_emp_car primary key (em_service_car_id)
 );
 
 -- Employee Profile
 CREATE TABLE EMPLOYEE_PROFILE (
     em_profile_id  number,
-    first_name     varchar2(20) not null,
-    last_name      varchar2(20) not null,
+    first_name     varchar2(20) not null,  
+    last_name      varchar2(20) not null, 
     email          varchar2(55) not null unique,
-    position       varchar2(10) not null,
-    password       varchar2(20) not null unique,
+    password       varchar2(20) not null,
     phone_number   varchar2(10) not null unique,
-    date_of_birth  date not null,
-    salary         number(7,2) not null,
     passport_Id    number not null unique,
     service_center_id  number not null,
     em_service_car_id  number not null,
-    constraint pk_employee_profile primary key (em_profile_id),
+    constraint pk_employee_profile primary key (em_profile_id),  
     constraint fk_service_center foreign key (service_center_id) references service_center (service_center_id),
     constraint fk_service_car foreign key (em_service_car_id) references employee_service_cars (em_service_car_id)
 );
 
+-- Employee Salary
+CREATE TABLE EMP_SALARY (
+    position       varchar2(10) not null,
+    salary         number(7,2) not null,
+    constraint pk_position primary key (position)
+);
+
+-- Employee Information
+CREATE TABLE EMP_INFO (
+    em_profile_id  number,
+    date_of_birth  date not null,
+    position       varchar2(10) not null,
+    constraint pk_EMP_INFO primary key (em_profile_id),  
+    constraint fk_position foreign key (position) references EMP_SALARY (position)
+);
+
 -- Customer Cars
 CREATE TABLE CUSTOMER_CARS (
-    customer_car_id    number,
-    brand              varchar2(20) not null,
-    model_number       number not null,
+    customer_car_id    number,   
     plate_number       number not null unique,
     constraint pk_customer_cars primary key (customer_car_id)
 );
 
+-- Customer Car
+CREATE TABLE CUST_CAR (
+    customer_car_id    number,  
+    brand              varchar2(20) not null,  
+    model_number       number not null,  
+    constraint pk_cust_car primary key (customer_car_id)
+);
+
 -- Customer Profile
 CREATE TABLE CUSTOMER_PROFILE (
-    customer_id    number,
-    first_name     varchar2(20) not null,
-    last_name      varchar2(20) not null,
-    email          varchar2(55) unique,
+    customer_id    number,  
+    first_name     varchar2(20) not null,  
+    last_name      varchar2(20) not null, 
+    email          varchar2(55) unique,  
     phone_number   varchar2(10) not null unique,
-    country        varchar2(20) not null,
-    password       varchar2(20) not null unique,
-    date_of_birth  Date,
+    password       varchar2(20) not null,
     customer_car_id  number not null,
-    constraint pk_customer_profile primary key (customer_id),
+    constraint pk_customer_profile primary key (customer_id),  
     constraint fk_customer_cars foreign key (customer_car_id) references customer_cars (customer_car_id)
+);
+
+--  Customer Information
+CREATE TABLE CUST_INFO (
+    customer_id    number,     
+    country varchar2(20) not null,
+    date_of_birth  Date,
+    constraint pk_customer primary key (customer_id)
 );
 
 -- Feedbacks
@@ -75,7 +106,7 @@ CREATE TABLE FEEDBACKS (
     rating       number,
     feedback     varchar2(1000),
     customer_id  number,
-    constraint pk_feedbacks primary key (feedback_id),
+    constraint pk_feedbacks primary key (feedback_id),       
     constraint fk_customer_profile foreign key (customer_id) references CUSTOMER_PROFILE (customer_id)
 );
 
@@ -91,7 +122,7 @@ CREATE TABLE SERVICES (
 CREATE TABLE CUSTOMER_ORDER (
     customer_order_id  number,
     service_id         number not null,
-    constraint pk_customer_order primary key (customer_order_id),
+    constraint pk_customer_order primary key (customer_order_id),        
     constraint fk_services foreign key (service_id) references services (service_id)
 );
 

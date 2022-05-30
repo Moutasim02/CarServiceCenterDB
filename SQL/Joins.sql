@@ -1,3 +1,4 @@
+
 -- Service Center relation JOIN Equipments relation
 SELECT * FROM SERVICE_CENTER sc INNER JOIN EQUIPMENTS e ON sc.service_center_id=e.service_center_id;
 
