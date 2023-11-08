@@ -1,6 +1,4 @@
-<br>
 
-![image](https://www.adu.ac.ae/ResourcePackages/AbuDhabiUniversityNew/assets/dist/img/images/adu/logo-1.png)
 
 # **Car Service Center Database Report**
 ### **Done By:**
